@@ -1,3 +1,7 @@
+"""
+idea: crear una lista con etiquetas y diccionarios
+"""
+
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 
@@ -59,5 +63,5 @@ if __name__ == "__main__":
     parser.setContentHandler(cHandler)
     parser.parse(open('karaoke.smil'))
 
-    listoncio = cHandler.get_tags()
-    print(listoncio)
+    listatotal = cHandler.get_tags()
+    print(listatotal)
