@@ -1,6 +1,7 @@
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 import sys
+import json
 
 
 class SmallSMILHandler(ContentHandler):
@@ -55,7 +56,9 @@ class SmallSMILHandler(ContentHandler):
             self.text = {}
 
     def get_tags(self):
+        print(self.lista)
         return self.lista
+        
 if __name__ == "__main__":
 
     parser = make_parser()
@@ -67,12 +70,17 @@ if __name__ == "__main__":
         sys.exit("Usage: python3 karaoke.py file.smil")
     etiquetas = ["root-layout","region","img","audio","textstream"]
     listatotal = cHandler.get_tags()
+    archivo = open("karaoke.json","w")
+    datjson = json.dump(listatotal, archivo)
+
     final = ""
     for elemento in listatotal:
-        print(elemento)
         if elemento in etiquetas:
-            final = final + "\n"
-            final = final + elemento + "\t"
+            if final == "":
+                final = final + elemento + "\t"
+            else:
+                final = final + "\n"
+                final = final + elemento + "\t"
         elif elemento != []:
             for key in elemento.keys():
                 if elemento[key] != "":
