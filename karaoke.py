@@ -16,6 +16,7 @@ class SmallSMILHandler(ContentHandler):
         self.img = {}
         self.aud = {}
         self.text = {}
+        self.acortada = "a"
 
     def startElement(self, etiqueta, attrs):
 
@@ -63,8 +64,35 @@ class SmallSMILHandler(ContentHandler):
     def get_tags(self):
         return self.lista
 
-    def get_url(self):
-        return self.listaurl
+    def do_local(self):
+        for url in self.listaurl:
+            trueurl = url.split("//")
+            if trueurl[0] == "http:":
+                localfinder = url.split("/")
+                self.acortada = urllib.request.urlretrieve(url,"/tmp/" + localfinder[4])
+                print("Descargando en /tmp/: " + localfinder[4])
+        return self.acortada
+        
+    def __str__(self):
+        etiquetas = ["root-layout","region","img","audio","textstream"]
+        final = ""
+        for elemento in self.lista:
+            if elemento in etiquetas:
+                if final == "":
+                    final = final + elemento + "\t"
+                else:
+                    final = final + "\n"
+                    final = final + elemento + "\t"
+            elif elemento != []:
+                for key in elemento.keys():
+                    if elemento[key] != "":
+                        final = final + key + '="' + elemento[key] + '"\t'
+        print (final)
+    
+    def to_json(self)
+        listatotal = cHandler.get_tags()
+        archivo = open("karaoke.json","w")
+        datjson = json.dump(listatotal, archivo)
         
 if __name__ == "__main__":
 
@@ -75,35 +103,17 @@ if __name__ == "__main__":
         parser.parse(open(sys.argv[1]))
     except FileNotFoundError:
         sys.exit("Usage: python3 karaoke.py file.smil")
-    etiquetas = ["root-layout","region","img","audio","textstream"]
-    listatotal = cHandler.get_tags()
     """
     urllib
     """
-    listaurls = cHandler.get_url()
-    for url in listaurls:
-        trueurl = url.split("//")
-        if trueurl[0] == "http:":
-            localfinder = url.split("/")
-            acortada = urllib.request.urlretrieve(url,"/tmp/" + localfinder[4])
+    cHandler.do_local()
     """
     json
     """
+    listatotal = cHandler.get_tags()
     archivo = open("karaoke.json","w")
     datjson = json.dump(listatotal, archivo)
     """
     impresion lista
     """
-    final = ""
-    for elemento in listatotal:
-        if elemento in etiquetas:
-            if final == "":
-                final = final + elemento + "\t"
-            else:
-                final = final + "\n"
-                final = final + elemento + "\t"
-        elif elemento != []:
-            for key in elemento.keys():
-                if elemento[key] != "":
-                    final = final + key + '="' + elemento[key] + '"\t'
-    print(final)
+    cHandler.__str__()
