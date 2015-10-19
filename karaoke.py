@@ -16,7 +16,7 @@ class SmallSMILHandler(ContentHandler):
         self.img = {}
         self.aud = {}
         self.text = {}
-        self.acortada = "a"
+        self.acortada = ""
 
     def startElement(self, etiqueta, attrs):
 
@@ -64,6 +64,8 @@ class SmallSMILHandler(ContentHandler):
     def get_tags(self):
         return self.lista
 
+class KaraokeLocal(SmallSMILHandler)
+
     def do_local(self):
         for url in self.listaurl:
             trueurl = url.split("//")
@@ -110,9 +112,9 @@ if __name__ == "__main__":
     """
     json
     """
-    listatotal = cHandler.get_tags()
-    archivo = open("karaoke.json","w")
-    datjson = json.dump(listatotal, archivo)
+    #listatotal = cHandler.get_tags()
+    #archivo = open("karaoke.json","w")
+    #datjson = json.dump(listatotal, archivo)
     """
     impresion lista
     """
