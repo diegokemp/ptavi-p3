@@ -2,6 +2,7 @@ from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 import sys
 import json
+import urllib.request
 
 
 class SmallSMILHandler(ContentHandler):
@@ -9,6 +10,7 @@ class SmallSMILHandler(ContentHandler):
     def __init__(self):
 
         self.lista = []
+        self.listaurl = []
         self.root = {}
         self.reg = {}
         self.img = {}
@@ -36,6 +38,7 @@ class SmallSMILHandler(ContentHandler):
         elif etiqueta == 'img':
             self.lista.append("img")
             self.img["src"] = attrs.get('src', "")
+            self.listaurl.append(self.img["src"])
             self.img["region"] = attrs.get('region', "")
             self.img["begin"] = attrs.get('begin', "")
             self.img["dur"] = attrs.get('dur', "")
@@ -44,6 +47,7 @@ class SmallSMILHandler(ContentHandler):
         elif etiqueta == 'audio':
             self.lista.append("audio")
             self.aud["src"] = attrs.get('src', "")
+            self.listaurl.append(self.aud["src"])
             self.aud["begin"] = attrs.get('begin', "")
             self.aud["dur"] = attrs.get('dur', "")
             self.lista.append(self.aud)
@@ -51,13 +55,16 @@ class SmallSMILHandler(ContentHandler):
         elif etiqueta == 'textstream':
             self.lista.append("textstream")
             self.text["src"] = attrs.get('src', "")
+            self.listaurl.append(self.text["src"])
             self.text["region"] = attrs.get('region', "")
             self.lista.append(self.text)
             self.text = {}
 
     def get_tags(self):
-        print(self.lista)
         return self.lista
+
+    def get_url(self):
+        return self.listaurl
         
 if __name__ == "__main__":
 
@@ -70,9 +77,16 @@ if __name__ == "__main__":
         sys.exit("Usage: python3 karaoke.py file.smil")
     etiquetas = ["root-layout","region","img","audio","textstream"]
     listatotal = cHandler.get_tags()
+    listaurls = cHandler.get_url()
+    for url in listaurls:
+        print("---------")
+        trueurl = url.split("//")
+        print(trueurl)
+        if trueurl == "http:":
+            local_File = urllib.urlretrieve(url)
+            print(local_file)
     archivo = open("karaoke.json","w")
     datjson = json.dump(listatotal, archivo)
-
     final = ""
     for elemento in listatotal:
         if elemento in etiquetas:
