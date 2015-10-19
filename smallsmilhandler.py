@@ -11,6 +11,7 @@ class SmallSMILHandler(ContentHandler):
     def __init__(self):
 
         self.lista = []
+        self.listaurl = []
         self.root = {}
         self.reg = {}
         self.img = {}
@@ -53,7 +54,7 @@ class SmallSMILHandler(ContentHandler):
             self.lista.append(self.aud)
             self.aud = {}
         elif etiqueta == 'textstream':
-            self.lista.append("textsream")
+            self.lista.append("textstream")
             self.text["src"] = attrs.get('src', "")
             self.listaurl.append(self.text["src"])
             self.text["region"] = attrs.get('region', "")
