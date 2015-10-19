@@ -35,12 +35,12 @@ class KaraokeLocal():
                 for key in elemento.keys():
                     if elemento[key] != "":
                         final = final + key + '="' + elemento[key] + '"\t'
-        print(final)
+        return final
 
-    def to_json(self):
-        archivo = open("karaoke.json","w")
+    def to_json(self, nombre):
+        archivo = open(nombre,"w")
         datjson = json.dump(self.listatotal, archivo)
-        print("Elemento json creado")
+        #print("Elemento json creado")
 
     def do_local(self):
         for url in self.listaurls:
@@ -48,13 +48,19 @@ class KaraokeLocal():
             if trueurl[0] == "http:":
                 localfinder = url.split("/")
                 acortada = urllib.request.urlretrieve(url,"/tmp/" + localfinder[4])
-                print("Descargando en /tmp/: " + localfinder[4])
+                #print("Descargando en /tmp/: " + localfinder[4])
         
         
 if __name__ == "__main__":
 
     fichero = sys.argv[1]
+    namefile = fichero.split(".")
     karaobj = KaraokeLocal(fichero)
+    print(karaobj)
+    try:
+        karaobj.to_json()
+    except TypeError:
+        karaobj.to_json(namefile[0] + ".json")   
     karaobj.do_local()
-    karaobj.__str__()
-    karaobj.to_json()
+    karaobj.to_json("local.json")
+    print(karaobj)
