@@ -38,6 +38,7 @@ class SmallSMILHandler(ContentHandler):
         elif etiqueta == 'img':
             self.lista.append("img")
             self.img["src"] = attrs.get('src', "")
+            self.listaurl.append(self.img["src"])
             self.img["region"] = attrs.get('region', "")
             self.img["begin"] = attrs.get('begin', "")
             self.img["dur"] = attrs.get('dur', "")
@@ -46,6 +47,7 @@ class SmallSMILHandler(ContentHandler):
         elif etiqueta == 'audio':
             self.lista.append("audio")
             self.aud["src"] = attrs.get('src', "")
+            self.listaurl.append(self.aud["src"])
             self.aud["begin"] = attrs.get('begin', "")
             self.aud["dur"] = attrs.get('dur', "")
             self.lista.append(self.aud)
@@ -53,12 +55,17 @@ class SmallSMILHandler(ContentHandler):
         elif etiqueta == 'textstream':
             self.lista.append("textsream")
             self.text["src"] = attrs.get('src', "")
+            self.listaurl.append(self.text["src"])
             self.text["region"] = attrs.get('region', "")
             self.lista.append(self.text)
             self.text = {}
 
     def get_tags(self):
         return self.lista
+
+    def get_url(self):
+        return self.listaurl
+
 if __name__ == "__main__":
 
     parser = make_parser()
