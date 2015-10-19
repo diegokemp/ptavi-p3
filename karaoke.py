@@ -77,16 +77,23 @@ if __name__ == "__main__":
         sys.exit("Usage: python3 karaoke.py file.smil")
     etiquetas = ["root-layout","region","img","audio","textstream"]
     listatotal = cHandler.get_tags()
+    """
+    urllib
+    """
     listaurls = cHandler.get_url()
     for url in listaurls:
-        print("---------")
         trueurl = url.split("//")
-        print(trueurl)
-        if trueurl == "http:":
-            local_File = urllib.urlretrieve(url)
-            print(local_file)
+        if trueurl[0] == "http:":
+            localfinder = url.split("/")
+            acortada = urllib.request.urlretrieve(url,"/tmp/" + localfinder[4])
+    """
+    json
+    """
     archivo = open("karaoke.json","w")
     datjson = json.dump(listatotal, archivo)
+    """
+    impresion lista
+    """
     final = ""
     for elemento in listatotal:
         if elemento in etiquetas:
