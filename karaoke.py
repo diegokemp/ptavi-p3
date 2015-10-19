@@ -3,7 +3,7 @@ from xml.sax.handler import ContentHandler
 import sys
 import json
 import urllib.request
-from smallsmilhandler import SmallSMILHandler #importa solo la clase
+from smallsmilhandler import SmallSMILHandler
 
 
 class KaraokeLocal():
@@ -22,7 +22,7 @@ class KaraokeLocal():
         self.listaurls = cHandler.get_url()
 
     def __str__(self):
-        etiquetas = ["root-layout","region","img","audio","textstream"]
+        etiquetas = ["root-layout", "region", "img", "audio", "textstream"]
         final = ""
         for elemento in self.listatotal:
             if elemento in etiquetas:
@@ -38,19 +38,19 @@ class KaraokeLocal():
         return final
 
     def to_json(self, nombre):
-        archivo = open(nombre,"w")
+        archivo = open(nombre, "w")
         datjson = json.dump(self.listatotal, archivo)
-        #print("Elemento json creado")
+        # print("Elemento json creado")
 
     def do_local(self):
         for url in self.listaurls:
             trueurl = url.split("//")
             if trueurl[0] == "http:":
-                localfinder = url.split("/")
-                acortada = urllib.request.urlretrieve(url,"/tmp/" + localfinder[4])
-                #print("Descargando en /tmp/: " + localfinder[4])
-        
-        
+                finder = url.split("/")
+                acortada = urllib.request.urlretrieve(url, "/tmp/" + finder[4])
+                # print("Descargando en /tmp/: " + finder[4])
+
+
 if __name__ == "__main__":
 
     fichero = sys.argv[1]
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     try:
         karaobj.to_json()
     except TypeError:
-        karaobj.to_json(namefile[0] + ".json")   
+        karaobj.to_json(namefile[0] + ".json")
     karaobj.do_local()
     karaobj.to_json("local.json")
     print(karaobj)
